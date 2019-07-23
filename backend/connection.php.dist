@@ -1,0 +1,8 @@
+<?php 
+
+    abstract class Connection {
+        public const HOST = "";
+        public const USER = "";
+        public const PASSWORD = "";
+        public const DATABASE = "";
+    }
