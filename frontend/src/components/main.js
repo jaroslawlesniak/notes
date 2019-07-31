@@ -10,6 +10,7 @@ class Main extends React.Component {
 
     render() {
         let InfoContainer;
+        let pageContent;
 
         if(this.state.loadingSpinner === true) {
             InfoContainer = <LoadingSpinner message="Wczytywanie ..."/>;
@@ -21,6 +22,12 @@ class Main extends React.Component {
             } else {
                 InfoContainer = <Info icon="icon-trash-empty" message="Notatki są automatycznie usuwane z kosza po 7 dniach"/>
             }
+        }
+
+        if(this.state.notes.length !== 0) {
+            
+        } else {
+            pageContent = InfoContainer;
         }
         
         return (
@@ -34,7 +41,7 @@ class Main extends React.Component {
                     </div>
                     <div className="col-md-9 notes">
                         {  this.state.notes.length === 0 &&
-                            InfoContainer
+                            pageContent
                         }
                     </div>
                 </div>
