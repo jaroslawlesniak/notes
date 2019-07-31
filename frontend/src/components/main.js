@@ -1,4 +1,5 @@
 import React from 'react';
+import Info from './info';
 
 class Main extends React.Component {
     render() {
@@ -12,12 +13,7 @@ class Main extends React.Component {
                         <div className="item"><i className="icon-trash-empty"></i>Kosz</div>
                     </div>
                     <div className="col-md-9 notes">
-                        <div className="info">
-                            <div className="wrapper">
-                                <i className="icon-lightbulb"></i>
-                                <p>Tutaj pojawią się dodane przez Ciebie notatki</p>
-                            </div>
-                        </div>
+                        <Info icon="icon-lightbulb" message="Tutaj pojawią się dodane przez Ciebie notatki"/>
                     </div>
                 </div>
             </main>
