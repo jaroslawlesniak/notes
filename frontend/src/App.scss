@@ -47,6 +47,7 @@ main {
         border-radius: 0px 25px 25px 0px;
         cursor: pointer;
         color: #888;
+        user-select: none;
 
         &:hover {
             color: #000;
@@ -88,6 +89,78 @@ main {
         color: #777;
         margin-top: 25px;
     }
+}
+
+//Loading spinner
+$width: 75px;
+
+.loader {
+  position: relative;
+  margin: 0 auto;
+  width: $width + 50;
+  text-align: center;
+  
+  &:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
+}
+
+.circular {
+  animation: rotate 2s linear infinite;
+  height: 100%;
+  transform-origin: center center;
+  width: $width;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.path {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s ease-in-out infinite;
+  stroke-linecap: round;
+  stroke: #ddae1f;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+
+.showbox {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5%;
+
+  p {
+      margin-top: 50px;
+      color: #666;
+  }
 }
 
 footer {
