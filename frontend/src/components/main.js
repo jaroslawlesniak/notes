@@ -33,7 +33,6 @@ class Main extends React.Component {
                         <div className="item active" onClick={ () => { this.selectMenuOption(1) }}><i className="icon-lightbulb"></i>Notatki</div>
                         <div className="item" onClick={ () => { this.selectMenuOption(2) }}><i className="icon-file-archive"></i>Archiwum</div>
                         <div className="item" onClick={ () => { this.selectMenuOption(3) }}><i className="icon-trash-empty"></i>Kosz</div>
-                        <div className="alert"></div>
                     </div>
                     <div className="col-md-9 notes">
                         { pageContent }
@@ -48,10 +47,25 @@ class Main extends React.Component {
     }
 
     createNewNote() {
-        let notes = this.state.notes;
-        notes.unshift({id: 8, title: "", content: ""});
-        this.setState({
-            notes: notes
+        fetch("http://localhost:8000/notes.php", {
+            method: "POST"
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(!json.success) {
+                alert("Wystąpił błąd podczas zapisu");
+            } else {
+                let notes = this.state.notes;
+                notes.unshift({
+                    id: json.id,
+                    title: "",
+                    content: ""
+                });
+
+                this.setState({
+                    notes: notes
+                });
+            }
         });
     }
 
@@ -70,12 +84,10 @@ class Main extends React.Component {
         })
         .then(res => res.json())
         .then(json => {
-            if(json.success) {
-                this.showAlert("Zapisano");
-            } else {
-                this.showAlert("Nie udało się zapisać");
+            if(!json.success) {
+                alert("Wystąpił błąd podczas zapisu");
             }
-        })
+        });
     }
 
     selectMenuOption(e) {
@@ -93,16 +105,6 @@ class Main extends React.Component {
         const notes = ["inbox", "archive", "trash"];
 
         this.getNotes(notes[e - 1]);
-    }
-
-    showAlert(msg) {
-        const infoObject = document.querySelector(".alert");
-        infoObject.innerHTML = msg;
-        infoObject.setAttribute("class", "alert active");
-
-        setTimeout(() => {
-            infoObject.setAttribute("class", "alert");
-        }, 2000);
     }
 }
 

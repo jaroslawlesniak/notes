@@ -18,13 +18,13 @@
 
                 switch($_GET['category']) {
                     case 'inbox':
-                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 0 AND `archive` = 0');
+                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 0 AND `archive` = 0 ORDER BY ID DESC');
                     break;
                     case 'archive':
-                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 0 AND `archive` = 1');
+                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 0 AND `archive` = 1 ORDER BY ID DESC');
                     break;
                     case 'trash':
-                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 1');
+                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 1 ORDER BY ID DESC');
                     break;
                 }
 
@@ -41,7 +41,25 @@
             }
         break;
         case "POST":
-            
+            $query = $pdo->prepare('INSERT INTO `notes` (`Title`, `Content`) VALUES (:title, :content)');
+
+            $query->bindValue(':title', '', PDO::PARAM_STR);
+            $query->bindValue(':content', '', PDO::PARAM_STR);
+
+            $success = $query->execute();
+
+            if($success) {
+                $query = $pdo->query('SELECT * FROM `notes` ORDER BY ID DESC LIMIT 1');
+
+                if($query) {
+                    while($note = $query->fetch()) {
+                        echo json_encode(["success" => true, "id" => $note['ID']]);
+                        break;
+                    }
+                }
+            } else {
+                echo json_encode(["success" => false]);
+            }
         break;
         case "PUT":
             if(isset($_GET['id']) && !empty($_GET['id'])) {

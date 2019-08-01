@@ -8,6 +8,11 @@ class Note extends React.Component {
             title: props.title,
             content: props.content
         }
+        this.prevState = {
+            id: this.state.id,
+            title: this.state.title,
+            content: this.state.content
+        }
     }
 
     render() {
@@ -20,11 +25,13 @@ class Note extends React.Component {
     }
 
     saveNote() {
-        this.props.syncNote({
-            id: this.state.id,
-            title: this.state.title,
-            content: this.state.content
-        });
+        if(this.prevState.title !== this.state.title || this.prevState.content !== this.state.content) {
+            this.props.syncNote({
+                id: this.state.id,
+                title: this.state.title,
+                content: this.state.content
+            });
+        }
     }
 
     syncNote() {
