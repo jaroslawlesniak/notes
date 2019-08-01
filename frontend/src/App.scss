@@ -88,28 +88,43 @@ nav {
 
 .notes {
   padding: 10px;
-  height: calc(100vh - 65px);
-  overflow-x: hidden;
-  overflow-y: auto;
+  min-height: calc(100vh - 65px);
 }
 
 .note {
-  width: 300px;
-  height: 300px;
-  background-color: #fff2ab;
-  display: inline-block;
-  margin: 20px;
-  vertical-align: top;
-  transition: all .1s linear;
+    width: 300px;
+    height: 300px;
+    background-color: #fff2ab;
+    display: inline-block;
+    margin: 20px;
+    vertical-align: top;
+    transition: all .1s linear;
+
+    .header {
+        background-color: #ffeb81;
+
+        i {
+            width: 20px;
+            text-align: center;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .icon-trash-empty {
+            &:hover {
+                color: #f44242;
+            }
+        }
+    }
 
   input[type="text"] {
     font-size: 16px;
     margin: 0px;
     padding: 10px;
-    background-color: #ffeb81;
-    width: 100%;
+    width: 270px;
     outline: none;
     border: none;
+    background-color: #ffeb81;
   }
 
   textarea {

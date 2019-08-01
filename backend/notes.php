@@ -3,6 +3,7 @@
     header("Content-type: application/json; charset=utf-8");
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Methods: *");
+
     include "./connection.php";
     
     $pdo = new PDO('mysql:host='.Connection::HOST.';dbname='.Connection::DATABASE.';charset=utf8', Connection::USER, Connection::PASSWORD);
@@ -77,6 +78,6 @@
             }
         break;
         case "DELETE":
-
+            
         break;
     }

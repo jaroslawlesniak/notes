@@ -13,7 +13,7 @@ class Main extends React.Component {
 
         if(this.state.notes.length !== 0) {
             pageContent = this.state.notes.map(note => (
-                <Note key={ note.id } id={ note.id } title={ note.title } content={ note.content } syncNote={ this.syncNote }/>
+                <Note key={ note.id } id={ note.id } title={ note.title } content={ note.content } syncNote={ this.syncNote } deleteNote={ this.deleteNote }/>
             ));
         } else {
             if(this.state.activeLink === 1) {
@@ -88,6 +88,10 @@ class Main extends React.Component {
                 alert("Wystąpił błąd podczas zapisu");
             }
         });
+    }
+
+    deleteNote = (noteID) => {
+        console.log(noteID);
     }
 
     selectMenuOption(e) {

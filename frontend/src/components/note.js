@@ -18,7 +18,10 @@ class Note extends React.Component {
     render() {
         return (
             <div className="note" id={ "note-" + this.state.id }>
-                <input onChange={ () => { this.syncNote() } } onBlur={ () => { this.saveNote() } } type="text" value={ this.state.title } />
+                <div className="header">
+                    <input onChange={ () => { this.syncNote() } } onBlur={ () => { this.saveNote() } } type="text" value={ this.state.title } />
+                    <i className="icon-trash-empty" title="Przenieś do kosza" onClick={ () => { this.props.deleteNote(this.state.id)} }></i>
+                </div>
                 <textarea onChange={ () => { this.syncNote() } } onBlur={ () => { this.saveNote() } } value={ this.state.content }/>
             </div>
         );
