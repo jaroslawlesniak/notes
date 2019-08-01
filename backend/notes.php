@@ -2,8 +2,9 @@
 
     header("Content-type: application/json; charset=utf-8");
     header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: *");
     include "./connection.php";
-
+    
     $pdo = new PDO('mysql:host='.Connection::HOST.';dbname='.Connection::DATABASE.';charset=utf8', Connection::USER, Connection::PASSWORD);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);  
 
@@ -30,7 +31,7 @@
                 if($query) {
                     while($note = $query->fetch())
                     {
-                        $notes[] = ['id' => $note['ID'], 'title' => $note['Title'], 'content' => $note['Content']];
+                        $notes[] = ['id' => (int) $note['ID'], 'title' => $note['Title'], 'content' => $note['Content']];
                     }
     
                     echo json_encode(['notes' => $notes], JSON_PRETTY_PRINT);
@@ -40,10 +41,22 @@
             }
         break;
         case "POST":
-
+            
         break;
         case "PUT":
+            if(isset($_GET['id']) && !empty($_GET['id'])) {
+                $post_vars = file_get_contents("php://input");
+                $post_vars = json_decode($post_vars, true);
 
+                $query = $pdo->prepare('UPDATE `notes` SET `Title` = :title, `Content` = :content WHERE `ID` = :id');
+                $query->bindValue(':title', $post_vars["title"], PDO::PARAM_STR);
+                $query->bindValue(':content', $post_vars["content"], PDO::PARAM_STR);
+                $query->bindValue(':id', $post_vars["id"], PDO::PARAM_INT);
+
+                $success = $query->execute();
+
+                echo json_encode(["success" => (boolean) $success]);
+            }
         break;
         case "DELETE":
 

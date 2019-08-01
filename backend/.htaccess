@@ -1,3 +1,7 @@
+Header set Access-Control-Allow-Origin "*"
+
+Options FollowSymLinks
 RewriteEngine On
 
-RewriteRule /notes/(*.) notes.php?category=$1
+
+RewriteRule notes/(*.) notes.php?category=$1 [L]

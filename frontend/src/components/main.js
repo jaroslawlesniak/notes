@@ -1,12 +1,11 @@
 import React from 'react';
 import Info from './info';
-import LoadingSpinner from "./loadingSpinner";
 import Note from './note';
 
 class Main extends React.Component {
     constructor() {
         super();
-        this.state = { notes: [], activeLink: 1, loadingSpinner: false }
+        this.state = { notes: [], activeLink: 1, alert: false }
     }
 
     render() {
@@ -14,7 +13,7 @@ class Main extends React.Component {
 
         if(this.state.notes.length !== 0) {
             pageContent = this.state.notes.map(note => (
-                <Note key={ note.id } title={ note.title } content={ note.content }/>
+                <Note key={ note.id } id={ note.id } title={ note.title } content={ note.content } syncNote={ this.syncNote }/>
             ));
         } else {
             if(this.state.activeLink === 1) {
@@ -30,10 +29,11 @@ class Main extends React.Component {
             <main>
                 <div className="row">
                     <div className="col-md-3 menu">
-                        <div className="item" onClick={() => { this.createNotePrompt() }}><i className="icon-plus"></i>Dodaj notatkę</div>
+                        <div className="item" onClick={() => { this.createNewNote() }}><i className="icon-plus"></i>Dodaj notatkę</div>
                         <div className="item active" onClick={ () => { this.selectMenuOption(1) }}><i className="icon-lightbulb"></i>Notatki</div>
                         <div className="item" onClick={ () => { this.selectMenuOption(2) }}><i className="icon-file-archive"></i>Archiwum</div>
                         <div className="item" onClick={ () => { this.selectMenuOption(3) }}><i className="icon-trash-empty"></i>Kosz</div>
+                        <div className="alert"></div>
                     </div>
                     <div className="col-md-9 notes">
                         { pageContent }
@@ -43,12 +43,16 @@ class Main extends React.Component {
         );
     }
 
-    createNotePrompt() {
-        
-    }
-
     componentDidMount() {
         this.getNotes("inbox");  
+    }
+
+    createNewNote() {
+        let notes = this.state.notes;
+        notes.unshift({id: 8, title: "", content: ""});
+        this.setState({
+            notes: notes
+        });
     }
 
     getNotes(type) {
@@ -57,6 +61,21 @@ class Main extends React.Component {
         .then(json => this.setState({
             notes: json.notes
         }));
+    }
+
+    syncNote = (note) => {
+        fetch("http://localhost:8000/notes.php?id=" + note.id, {
+            method: "PUT",
+            body: JSON.stringify(note)
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(json.success) {
+                this.showAlert("Zapisano");
+            } else {
+                this.showAlert("Nie udało się zapisać");
+            }
+        })
     }
 
     selectMenuOption(e) {
@@ -74,6 +93,16 @@ class Main extends React.Component {
         const notes = ["inbox", "archive", "trash"];
 
         this.getNotes(notes[e - 1]);
+    }
+
+    showAlert(msg) {
+        const infoObject = document.querySelector(".alert");
+        infoObject.innerHTML = msg;
+        infoObject.setAttribute("class", "alert active");
+
+        setTimeout(() => {
+            infoObject.setAttribute("class", "alert");
+        }, 2000);
     }
 }
 
