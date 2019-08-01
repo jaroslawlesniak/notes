@@ -1,6 +1,7 @@
 import React from 'react';
 import Info from './info';
-import LoadingSpinner from "./loadingSpinner"; 
+import LoadingSpinner from "./loadingSpinner";
+import Note from './note';
 
 class Main extends React.Component {
     constructor() {
@@ -9,25 +10,20 @@ class Main extends React.Component {
     }
 
     render() {
-        let InfoContainer;
-        let pageContent;
-
-        if(this.state.loadingSpinner === true) {
-            InfoContainer = <LoadingSpinner message="Wczytywanie ..."/>;
-        } else {
-            if(this.state.activeLink === 1) {
-                InfoContainer = <Info icon="icon-lightbulb" message="Tutaj pojawią się dodane przez Ciebie notatki"/>;
-            } else if (this.state.activeLink === 2) {
-                InfoContainer = <Info icon="icon-file-archive" message="Tutaj pojawiają się zarchiwizowane notatki"/>
-            } else {
-                InfoContainer = <Info icon="icon-trash-empty" message="Notatki są automatycznie usuwane z kosza po 7 dniach"/>
-            }
-        }
+        let pageContent = "";
 
         if(this.state.notes.length !== 0) {
-            
+            pageContent = this.state.notes.map(note => (
+                <Note key={ note.id } title={ note.title } content={ note.content }/>
+            ));
         } else {
-            pageContent = InfoContainer;
+            if(this.state.activeLink === 1) {
+                pageContent = <Info icon="icon-lightbulb" message="Tutaj pojawią się dodane przez Ciebie notatki"/>;
+            } else if (this.state.activeLink === 2) {
+                pageContent = <Info icon="icon-file-archive" message="Tutaj pojawiają się zarchiwizowane notatki"/>
+            } else {
+                pageContent = <Info icon="icon-trash-empty" message="Notatki są automatycznie usuwane z kosza po 7 dniach"/>
+            }
         }
         
         return (
@@ -40,9 +36,7 @@ class Main extends React.Component {
                         <div className="item" onClick={ () => { this.selectMenuOption(3) }}><i className="icon-trash-empty"></i>Kosz</div>
                     </div>
                     <div className="col-md-9 notes">
-                        {  this.state.notes.length === 0 &&
-                            pageContent
-                        }
+                        { pageContent }
                     </div>
                 </div>
             </main>
@@ -51,6 +45,18 @@ class Main extends React.Component {
 
     createNotePrompt() {
         
+    }
+
+    componentDidMount() {
+        this.getNotes("inbox");  
+    }
+
+    getNotes(type) {
+        fetch("http://localhost:8000/notes.php?category=" + type)
+        .then(res => res.json())
+        .then(json => this.setState({
+            notes: json.notes
+        }));
     }
 
     selectMenuOption(e) {
@@ -64,6 +70,10 @@ class Main extends React.Component {
         this.setState({
             activeLink: e
         });
+
+        const notes = ["inbox", "archive", "trash"];
+
+        this.getNotes(notes[e - 1]);
     }
 }
 

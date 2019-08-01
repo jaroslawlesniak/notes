@@ -1,6 +1,7 @@
 <?php
 
     header("Content-type: application/json; charset=utf-8");
+    header("Access-Control-Allow-Origin: *");
     include "./connection.php";
 
     $pdo = new PDO('mysql:host='.Connection::HOST.';dbname='.Connection::DATABASE.';charset=utf8', Connection::USER, Connection::PASSWORD);
@@ -29,7 +30,7 @@
                 if($query) {
                     while($note = $query->fetch())
                     {
-                        $notes[] = ['ID' => $note['ID'], 'Title' => $note['Title'], 'Content' => $note['Content']];
+                        $notes[] = ['id' => $note['ID'], 'title' => $note['Title'], 'content' => $note['Content']];
                     }
     
                     echo json_encode(['notes' => $notes], JSON_PRETTY_PRINT);
