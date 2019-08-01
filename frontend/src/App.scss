@@ -13,7 +13,6 @@ nav {
     padding: 10px;
     background-color: #fff;
     border-bottom: 1px solid #ddd;
-    // box-shadow: 0px 0px 5px #888;
     text-align: justify;
 
     input[type="text"] {
@@ -36,10 +35,6 @@ nav {
     }
 }
 
-main {
-    min-height: calc(100vh - 65px);
-}
-
 .menu {
     .item {
         font-size: 20px;
@@ -54,11 +49,11 @@ main {
         }
 
         &.active {
-            background-color: #FEEFC3;
+            background-color: #fff2ab;
             color: #000;
 
             &:hover {
-                background-color: darken(#FEEFC3, 5);
+                background-color: darken(#fff2ab, 5);
             }
         }
 
@@ -73,7 +68,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: calc(100vh - 65px);
+    height: calc(100vh - 85px);
 
     i {
         font-size: 60px;
@@ -91,75 +86,43 @@ main {
     }
 }
 
-//Loading spinner
-$width: 75px;
-
-.loader {
-  position: relative;
-  margin: 0 auto;
-  width: $width + 50;
-  text-align: center;
-  
-  &:before {
-    content: '';
-    display: block;
-    padding-top: 100%;
-  }
+.notes {
+  padding: 10px;
+  min-height: calc(100vh - 65px);
 }
 
-.circular {
-  animation: rotate 2s linear infinite;
-  height: 100%;
-  transform-origin: center center;
-  width: $width;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-}
+.note {
+  width: 300px;
+  height: 300px;
+  background-color: #fff2ab;
+  display: inline-block;
+  margin: 20px;
+  vertical-align: top;
+  transition: all .1s linear;
 
-.path {
-  stroke-dasharray: 1, 200;
-  stroke-dashoffset: 0;
-  animation: dash 1.5s ease-in-out infinite;
-  stroke-linecap: round;
-  stroke: #ddae1f;
-}
-
-@keyframes rotate {
-  100% {
-    transform: rotate(360deg);
+  input[type="text"] {
+    font-size: 16px;
+    margin: 0px;
+    padding: 10px;
+    background-color: #ffeb81;
+    width: 100%;
+    outline: none;
+    border: none;
   }
-}
 
-@keyframes dash {
-  0% {
-    stroke-dasharray: 1, 200;
-    stroke-dashoffset: 0;
+  textarea {
+    font-size: 16px;
+    padding: 10px;
+    background-color: inherit;
+    width: 100%;
+    height: 250px !important;
+    resize: none;
+    border: none;
+    outline: none;
   }
-  50% {
-    stroke-dasharray: 89, 200;
-    stroke-dashoffset: -35px;
-  }
-  100% {
-    stroke-dasharray: 89, 200;
-    stroke-dashoffset: -124px;
-  }
-}
 
-.showbox {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 5%;
-
-  p {
-      margin-top: 50px;
-      color: #666;
+  &:hover {
+    box-shadow: 0px 0px 3px #333;
   }
 }
 

@@ -11,8 +11,8 @@ class Note extends React.Component {
     render() {
         return (
             <div className="note">
-                <h1>{ this.state.props.title }</h1>
-                <p>{ this.state.props.content }</p>
+                <input type="text" value={ this.state.props.title } />
+                <textarea>{ this.state.props.content }</textarea>
             </div>
         );
     }
