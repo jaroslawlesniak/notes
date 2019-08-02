@@ -78,6 +78,12 @@
             }
         break;
         case "DELETE":
-            
+            if(isset($_GET['id']) && !empty($_GET['id'])) {
+                $query = $pdo->prepare('UPDATE `notes` SET `trash` = 1 WHERE `ID` = :id');
+                $query->bindValue(':id', $_GET["id"], PDO::PARAM_INT);
+                $success = $query->execute();
+
+                echo json_encode(["success" => (boolean) $success]);
+            }
         break;
     }

@@ -91,7 +91,28 @@ class Main extends React.Component {
     }
 
     deleteNote = (noteID) => {
-        console.log(noteID);
+        fetch("http://localhost:8000/notes.php?id=" + noteID, {
+            method: "DELETE",
+            body: JSON.stringify(noteID)
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(json.success) {
+                for(let i in this.state.notes) {
+                    const note = this.state.notes[i];
+                    if(note.id === noteID) {
+                        const notes = this.state.notes;
+
+                        notes.splice(i, 1)
+
+                        this.setState({
+                            notes: notes
+                        });
+                        break;
+                    }
+                }
+            }
+        })
     }
 
     selectMenuOption(e) {
