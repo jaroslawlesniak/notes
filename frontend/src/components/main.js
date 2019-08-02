@@ -5,7 +5,7 @@ import Note from './note';
 class Main extends React.Component {
     constructor() {
         super();
-        this.state = { notes: [], activeLink: 1, alert: false }
+        this.state = { notes: [], activeLink: 1 }
     }
 
     render() {
@@ -13,7 +13,7 @@ class Main extends React.Component {
 
         if(this.state.notes.length !== 0) {
             pageContent = this.state.notes.map(note => (
-                <Note key={ note.id } id={ note.id } title={ note.title } content={ note.content } syncNote={ this.syncNote } deleteNote={ this.deleteNote }/>
+                <Note key={ note.id } id={ note.id } title={ note.title } content={ note.content } syncNote={ this.syncNote } deleteNote={ this.deleteNote } archiveNote={ this.archiveNote }/>
             ));
         } else {
             if(this.state.activeLink === 1) {
@@ -112,7 +112,32 @@ class Main extends React.Component {
                     }
                 }
             }
+        });
+    }
+
+    archiveNote = (noteID) => {
+        fetch("http://localhost:8000/notes.php?id=" + noteID, {
+            method: "PUT",
+            body: JSON.stringify({ type: "archive" })
         })
+        .then(res => res.json())
+        .then(json => {
+            if(json.success) {
+                for(let i in this.state.notes) {
+                    const note = this.state.notes[i];
+                    if(note.id === noteID) {
+                        const notes = this.state.notes;
+
+                        notes.splice(i, 1)
+
+                        this.setState({
+                            notes: notes
+                        });
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     selectMenuOption(e) {

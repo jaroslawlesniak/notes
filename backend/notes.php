@@ -67,14 +67,22 @@
                 $post_vars = file_get_contents("php://input");
                 $post_vars = json_decode($post_vars, true);
 
-                $query = $pdo->prepare('UPDATE `notes` SET `Title` = :title, `Content` = :content WHERE `ID` = :id');
-                $query->bindValue(':title', $post_vars["title"], PDO::PARAM_STR);
-                $query->bindValue(':content', $post_vars["content"], PDO::PARAM_STR);
-                $query->bindValue(':id', $post_vars["id"], PDO::PARAM_INT);
+                if(isset($post_vars["type"]) && !empty($post_vars["type"])) {
+                    $query = $pdo->prepare('UPDATE `notes` SET `archive` = 1 WHERE `ID` = :id');
+                    $query->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+                    $success = $query->execute();
 
-                $success = $query->execute();
-
-                echo json_encode(["success" => (boolean) $success]);
+                    echo json_encode(["success" => (boolean) $success]); 
+                } else {
+                    $query = $pdo->prepare('UPDATE `notes` SET `Title` = :title, `Content` = :content WHERE `ID` = :id');
+                    $query->bindValue(':title', $post_vars["title"], PDO::PARAM_STR);
+                    $query->bindValue(':content', $post_vars["content"], PDO::PARAM_STR);
+                    $query->bindValue(':id', $post_vars["id"], PDO::PARAM_INT);
+    
+                    $success = $query->execute();
+    
+                    echo json_encode(["success" => (boolean) $success]);
+                }               
             }
         break;
         case "DELETE":

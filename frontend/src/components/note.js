@@ -20,6 +20,7 @@ class Note extends React.Component {
             <div className="note" id={ "note-" + this.state.id }>
                 <div className="header">
                     <input onChange={ () => { this.syncNote() } } onBlur={ () => { this.saveNote() } } type="text" value={ this.state.title } />
+                    <i className="icon-file-archive" title="Zarchiwizuj notatkę" onClick={ () => { this.props.archiveNote(this.state.id)} }></i>
                     <i className="icon-trash-empty" title="Przenieś do kosza" onClick={ () => { this.props.deleteNote(this.state.id)} }></i>
                 </div>
                 <textarea onChange={ () => { this.syncNote() } } onBlur={ () => { this.saveNote() } } value={ this.state.content }/>
