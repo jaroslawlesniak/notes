@@ -32,17 +32,17 @@
                 if($query) {
                     while($note = $query->fetch())
                     {
-                        $notes[] = ['id' => (int) $note['ID'], 'title' => $note['Title'], 'content' => $note['Content']];
+                        $notes[] = ['id' => (int) $note['ID'], 'title' => $note['title'], 'content' => $note['content']];
                     }
     
                     echo json_encode(['notes' => $notes], JSON_PRETTY_PRINT);
                 }
             } else {
-                echo json_encode(['notes' => []]);
+                echo json_encode(['notes' => []], JSON_PRETTY_PRINT);
             }
         break;
         case "POST":
-            $query = $pdo->prepare('INSERT INTO `notes` (`Title`, `Content`) VALUES (:title, :content)');
+            $query = $pdo->prepare('INSERT INTO `notes` (`title`, `content`) VALUES (:title, :content)');
 
             $query->bindValue(':title', '', PDO::PARAM_STR);
             $query->bindValue(':content', '', PDO::PARAM_STR);
@@ -74,7 +74,7 @@
 
                     echo json_encode(["success" => (boolean) $success]); 
                 } else {
-                    $query = $pdo->prepare('UPDATE `notes` SET `Title` = :title, `Content` = :content WHERE `ID` = :id');
+                    $query = $pdo->prepare('UPDATE `notes` SET `title` = :title, `content` = :content WHERE `ID` = :id');
                     $query->bindValue(':title', $post_vars["title"], PDO::PARAM_STR);
                     $query->bindValue(':content', $post_vars["content"], PDO::PARAM_STR);
                     $query->bindValue(':id', $post_vars["id"], PDO::PARAM_INT);

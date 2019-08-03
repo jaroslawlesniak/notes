@@ -1,6 +1,7 @@
 import React from 'react';
 import Info from './info';
 import Note from './note';
+import API from '../libs/api';
 
 class Main extends React.Component {
     constructor() {
@@ -47,7 +48,7 @@ class Main extends React.Component {
     }
 
     createNewNote() {
-        fetch("http://localhost:8000/notes.php", {
+        fetch(API.URL + "/notes.php", {
             method: "POST"
         })
         .then(res => res.json())
@@ -70,7 +71,7 @@ class Main extends React.Component {
     }
 
     getNotes(type) {
-        fetch("http://localhost:8000/notes.php?category=" + type)
+        fetch(API.URL + "/notes.php?category=" + type)
         .then(res => res.json())
         .then(json => this.setState({
             notes: json.notes
@@ -78,7 +79,7 @@ class Main extends React.Component {
     }
 
     syncNote = (note) => {
-        fetch("http://localhost:8000/notes.php?id=" + note.id, {
+        fetch(API.URL + "/notes.php?id=" + note.id, {
             method: "PUT",
             body: JSON.stringify(note)
         })
@@ -91,7 +92,7 @@ class Main extends React.Component {
     }
 
     deleteNote = (noteID) => {
-        fetch("http://localhost:8000/notes.php?id=" + noteID, {
+        fetch(API.URL + "/notes.php?id=" + noteID, {
             method: "DELETE",
             body: JSON.stringify(noteID)
         })
@@ -116,7 +117,7 @@ class Main extends React.Component {
     }
 
     archiveNote = (noteID) => {
-        fetch("http://localhost:8000/notes.php?id=" + noteID, {
+        fetch(API.URL + "/notes.php?id=" + noteID, {
             method: "PUT",
             body: JSON.stringify({ type: "archive" })
         })
