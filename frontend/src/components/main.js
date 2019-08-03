@@ -2,27 +2,32 @@ import React from 'react';
 import Info from './info';
 import Note from './note';
 import API from '../libs/api';
+import LoadingSpinner from './loadingSpinner';
 
 class Main extends React.Component {
     constructor() {
         super();
-        this.state = { notes: [], activeLink: 1 }
+        this.state = { notes: [], activeLink: 1, loading: false }
     }
 
     render() {
         let pageContent = "";
 
+        if(this.state.loading === true) {
+            pageContent = <LoadingSpinner message="Wczytywanie ..."/>
+        } else {
         if(this.state.notes.length !== 0) {
             pageContent = this.state.notes.map(note => (
                 <Note key={ note.id } id={ note.id } title={ note.title } content={ note.content } syncNote={ this.syncNote } deleteNote={ this.deleteNote } archiveNote={ this.archiveNote }/>
-            ));
-        } else {
-            if(this.state.activeLink === 1) {
-                pageContent = <Info icon="icon-lightbulb" message="Tutaj pojawią się dodane przez Ciebie notatki"/>;
-            } else if (this.state.activeLink === 2) {
-                pageContent = <Info icon="icon-file-archive" message="Tutaj pojawiają się zarchiwizowane notatki"/>
+                ));
             } else {
-                pageContent = <Info icon="icon-trash-empty" message="Notatki są automatycznie usuwane z kosza po 7 dniach"/>
+                if(this.state.activeLink === 1) {
+                    pageContent = <Info icon="icon-lightbulb" message="Tutaj pojawią się dodane przez Ciebie notatki"/>;
+                } else if (this.state.activeLink === 2) {
+                    pageContent = <Info icon="icon-file-archive" message="Tutaj pojawiają się zarchiwizowane notatki"/>
+                } else {
+                    pageContent = <Info icon="icon-trash-empty" message="Notatki są automatycznie usuwane z kosza po 7 dniach"/>
+                }
             }
         }
         
@@ -71,11 +76,19 @@ class Main extends React.Component {
     }
 
     getNotes(type) {
+        this.setState({
+            loading: true
+        });
         fetch(API.URL + "/notes.php?category=" + type)
         .then(res => res.json())
-        .then(json => this.setState({
-            notes: json.notes
-        }));
+        .then(json => {
+            setTimeout(() => {
+                this.setState({
+                    notes: json.notes,
+                    loading: false
+                    });
+            }, 300);
+        });
     }
 
     syncNote = (note) => {
