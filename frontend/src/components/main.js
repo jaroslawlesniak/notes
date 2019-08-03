@@ -155,20 +155,22 @@ class Main extends React.Component {
     }
 
     selectMenuOption(e) {
-        const menuItems = document.querySelectorAll(".menu .item");
-        
-        for(let menuItem of menuItems) {
-            menuItem.setAttribute("class", "item");
+        if(this.state.loading === false) {
+            const menuItems = document.querySelectorAll(".menu .item");
+            
+            for(let menuItem of menuItems) {
+                menuItem.setAttribute("class", "item");
+            }
+
+            menuItems[e].setAttribute("class", "item active");
+            this.setState({
+                activeLink: e
+            });
+
+            const notes = ["inbox", "archive", "trash"];
+
+            this.getNotes(notes[e - 1]);
         }
-
-        menuItems[e].setAttribute("class", "item active");
-        this.setState({
-            activeLink: e
-        });
-
-        const notes = ["inbox", "archive", "trash"];
-
-        this.getNotes(notes[e - 1]);
     }
 }
 
