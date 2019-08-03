@@ -30,9 +30,12 @@
                 }
 
                 if($query) {
-                    while($note = $query->fetch())
+                    while($note = $query->fetch(PDO::FETCH_ASSOC))
                     {
-                        $notes[] = ['id' => (int) $note['ID'], 'title' => $note['title'], 'content' => $note['content']];
+                        $notes[] = $note;
+                        $note["ID"] = (int) $note["ID"];
+                        $note["trash"] = (int) $note["trash"];
+                        $note["archive"] = (int) $note["archive"];
                     }
     
                     echo json_encode(['notes' => $notes], JSON_PRETTY_PRINT);
@@ -77,7 +80,7 @@
                     $query = $pdo->prepare('UPDATE `notes` SET `title` = :title, `content` = :content WHERE `ID` = :id');
                     $query->bindValue(':title', $post_vars["title"], PDO::PARAM_STR);
                     $query->bindValue(':content', $post_vars["content"], PDO::PARAM_STR);
-                    $query->bindValue(':id', $post_vars["id"], PDO::PARAM_INT);
+                    $query->bindValue(':id', $post_vars["ID"], PDO::PARAM_INT);
     
                     $success = $query->execute();
     

@@ -16,9 +16,9 @@ class Main extends React.Component {
         if(this.state.loading === true) {
             pageContent = <LoadingSpinner message="Wczytywanie ..."/>
         } else {
-        if(this.state.notes.length !== 0) {
-            pageContent = this.state.notes.map(note => (
-                <Note key={ note.id } id={ note.id } title={ note.title } content={ note.content } syncNote={ this.syncNote } deleteNote={ this.deleteNote } archiveNote={ this.archiveNote }/>
+            if(this.state.notes.length !== 0) {
+                pageContent = this.state.notes.map(note => (
+                    <Note key={ note.ID } note={ note } syncNote={ this.syncNote } deleteNote={ this.deleteNote } archiveNote={ this.archiveNote }/>
                 ));
             } else {
                 if(this.state.activeLink === 1) {
@@ -63,7 +63,7 @@ class Main extends React.Component {
             } else {
                 let notes = this.state.notes;
                 notes.unshift({
-                    id: json.id,
+                    ID: json.id,
                     title: "",
                     content: ""
                 });
@@ -92,7 +92,8 @@ class Main extends React.Component {
     }
 
     syncNote = (note) => {
-        fetch(API.URL + "/notes.php?id=" + note.id, {
+        console.log(note);
+        fetch(API.URL + "/notes.php?id=" + note.ID, {
             method: "PUT",
             body: JSON.stringify(note)
         })
@@ -114,7 +115,9 @@ class Main extends React.Component {
             if(json.success) {
                 for(let i in this.state.notes) {
                     const note = this.state.notes[i];
-                    if(note.id === noteID) {
+                    note.ID = parseInt(note.ID);
+                    
+                    if(note.ID === noteID) {
                         const notes = this.state.notes;
 
                         notes.splice(i, 1)
@@ -139,7 +142,9 @@ class Main extends React.Component {
             if(json.success) {
                 for(let i in this.state.notes) {
                     const note = this.state.notes[i];
-                    if(note.id === noteID) {
+                    note.ID = parseInt(note.ID);
+
+                    if(note.ID === noteID) {
                         const notes = this.state.notes;
 
                         notes.splice(i, 1)

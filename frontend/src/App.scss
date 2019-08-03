@@ -99,6 +99,7 @@ nav {
     margin: 20px;
     vertical-align: top;
     transition: all .1s linear;
+    max-width: calc(100% - 40px);
 
     .header {
         background-color: #ffeb81;
@@ -108,11 +109,15 @@ nav {
             cursor: pointer;
             display: inline-block;
             width: 25px;
+            margin-right: 0px;
+
+
+            &:last-of-type {
+                margin-right: 10px;
+            }
         }
 
-        .icon-trash-empty {
-            margin-right: 10px;
-            
+        .icon-trash-empty {            
             &:hover {
                 color: #f44242;
             }
@@ -125,15 +130,21 @@ nav {
         }
     }
 
-  input[type="text"] {
-    font-size: 16px;
-    margin: 0px;
-    padding: 10px;
-    width: 240px;
-    outline: none;
-    border: none;
-    background-color: #ffeb81;
-  }
+    .buttons {
+        display: inline-block;
+        text-align: right;
+        width: 60px;
+    }
+
+    input[type="text"] {
+        font-size: 16px;
+        margin: 0px;
+        padding: 10px;
+        width: 240px;
+        outline: none;
+        border: none;
+        background-color: #ffeb81;
+    }
 
   textarea {
     font-size: 16px;
@@ -243,4 +254,12 @@ footer {
       text-align: center;
       color: #666;
   }
+}
+
+@media screen and (max-width: 770px) {
+    .menu {
+        .item {
+            border-radius: 0px;
+        }
+    }
 }
