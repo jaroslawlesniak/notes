@@ -2,6 +2,7 @@ import React from 'react';
 import Info from './info';
 import Note from './note';
 import API from '../libs/api';
+import METHOD from '../libs/method';
 import LoadingSpinner from './loadingSpinner';
 
 class Main extends React.Component {
@@ -18,7 +19,7 @@ class Main extends React.Component {
         } else {
             if(this.state.notes.length !== 0) {
                 pageContent = this.state.notes.map(note => (
-                    <Note key={ note.ID } note={ note } syncNote={ this.syncNote } deleteNote={ this.deleteNote } archiveNote={ this.archiveNote }/>
+                    <Note key={ note.ID } note={ note } saveNote={ this.saveNote } />
                 ));
             } else {
                 if(this.state.activeLink === 1) {
@@ -91,72 +92,42 @@ class Main extends React.Component {
         });
     }
 
-    syncNote = (note) => {
-        console.log(note);
-        fetch(API.URL + "/notes.php?id=" + note.ID, {
-            method: "PUT",
-            body: JSON.stringify(note)
-        })
-        .then(res => res.json())
-        .then(json => {
-            if(!json.success) {
-                alert("Wystąpił błąd podczas zapisu");
-            }
-        });
-    }
-
-    deleteNote = (noteID) => {
-        fetch(API.URL + "/notes.php?id=" + noteID, {
-            method: "DELETE",
-            body: JSON.stringify(noteID)
-        })
-        .then(res => res.json())
-        .then(json => {
-            if(json.success) {
-                for(let i in this.state.notes) {
-                    const note = this.state.notes[i];
-                    note.ID = parseInt(note.ID);
-                    
-                    if(note.ID === noteID) {
-                        const notes = this.state.notes;
-
-                        notes.splice(i, 1)
-
-                        this.setState({
-                            notes: notes
-                        });
-                        break;
-                    }
+    saveNote = (note) => {
+        if(note.method !== METHOD.UPDATE_CONTENT) {
+            for(let i in this.state.notes) {
+                const singleNote = this.state.notes[i];
+                singleNote.ID = parseInt(singleNote.ID);
+                if(singleNote.ID === note.ID) {
+                    const notes = this.state.notes;
+                    notes.splice(i, 1)
+                    this.setState({
+                        notes: notes
+                    });
+                    break;
                 }
             }
-        });
-    }
+        }
 
-    archiveNote = (noteID) => {
-        fetch(API.URL + "/notes.php?id=" + noteID, {
-            method: "PUT",
-            body: JSON.stringify({ type: "archive" })
-        })
-        .then(res => res.json())
-        .then(json => {
-            if(json.success) {
-                for(let i in this.state.notes) {
-                    const note = this.state.notes[i];
-                    note.ID = parseInt(note.ID);
-
-                    if(note.ID === noteID) {
-                        const notes = this.state.notes;
-
-                        notes.splice(i, 1)
-
-                        this.setState({
-                            notes: notes
-                        });
-                        break;
-                    }
-                }
-            }
-        });
+        switch(note.method) {
+            case METHOD.UPDATE_CONTENT:
+                fetch(API.URL + "/notes.php?id=" + note.ID, {
+                    method: "PUT",
+                    body: JSON.stringify({note})
+                });
+            break;
+            case METHOD.UPDATE_STATUS:
+                fetch(API.URL + "/notes.php?id=" + note.ID, {
+                    method: "PUT",
+                    body: JSON.stringify({note})
+                }).then(e => console.log(e.text()))
+            break;
+            case METHOD.DELETE:
+                fetch(API.URL + "/notes.php?id=" + note.ID, {
+                    method: "DELETE"
+                });
+            break;
+            default:
+        }
     }
 
     selectMenuOption(e) {

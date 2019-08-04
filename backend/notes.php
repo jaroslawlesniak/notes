@@ -70,22 +70,25 @@
                 $post_vars = file_get_contents("php://input");
                 $post_vars = json_decode($post_vars, true);
 
-                if(isset($post_vars["type"]) && !empty($post_vars["type"])) {
-                    $query = $pdo->prepare('UPDATE `notes` SET `archive` = 1 WHERE `ID` = :id');
-                    $query->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+                if($post_vars['note']['method'] === 0) {
+                    $query = $pdo->prepare('UPDATE `notes` SET `title` = :title, `content` = :content WHERE `ID` = :id');
+                    $query->bindValue(':id', $post_vars['note']['ID'], PDO::PARAM_INT);
+                    $query->bindValue(':title', $post_vars['note']['title'], PDO::PARAM_STR);
+                    $query->bindValue(':content', $post_vars['note']['content'], PDO::PARAM_STR);
+                    $success = $query->execute();
+                    
+                    echo json_encode(["success" => (boolean) $success]);
+                }  
+
+                if($post_vars['note']['method'] === 1) {
+                    $query = $pdo->prepare('UPDATE `notes` SET `archive` = :archive, `trash` = :trash WHERE `ID` = :id');
+                    $query->bindValue(':id', $post_vars['note']['ID'], PDO::PARAM_INT);
+                    $query->bindValue(':archive', $post_vars['note']['archive'], PDO::PARAM_INT);
+                    $query->bindValue(':trash', $post_vars['note']['trash'], PDO::PARAM_INT);
                     $success = $query->execute();
 
                     echo json_encode(["success" => (boolean) $success]); 
-                } else {
-                    $query = $pdo->prepare('UPDATE `notes` SET `title` = :title, `content` = :content WHERE `ID` = :id');
-                    $query->bindValue(':title', $post_vars["title"], PDO::PARAM_STR);
-                    $query->bindValue(':content', $post_vars["content"], PDO::PARAM_STR);
-                    $query->bindValue(':id', $post_vars["ID"], PDO::PARAM_INT);
-    
-                    $success = $query->execute();
-    
-                    echo json_encode(["success" => (boolean) $success]);
-                }               
+                }          
             }
         break;
         case "DELETE":

@@ -29,6 +29,12 @@
       "css": "plus",
       "code": 59393,
       "src": "fontawesome"
+    },
+    {
+      "uid": "f9c3205df26e7778abac86183aefdc99",
+      "css": "ccw",
+      "code": 59394,
+      "src": "fontawesome"
     }
   ]
 }
