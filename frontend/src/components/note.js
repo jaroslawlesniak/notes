@@ -95,7 +95,6 @@ class Note extends React.Component {
     }
 
     pernamentDeleteNote() {
-        alert('ok');
         this.setState({
             trash: 1
         }, () => { this.saveNote(METHOD.PERNAMENT_DELETE) });
