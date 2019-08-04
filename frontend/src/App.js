@@ -4,11 +4,7 @@ import './App.scss';
 import Main from './components/main';
 import Footer from './components/footer';
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Redirect } from 'react-router'
 
 

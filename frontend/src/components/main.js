@@ -5,11 +5,7 @@ import API from '../libs/api';
 import METHOD from '../libs/method';
 import LoadingSpinner from './loadingSpinner';
 
-import {
-    BrowserRouter as Router,
-    Route,
-    Link
-  } from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 
 class Main extends React.Component {
     constructor(props) {
