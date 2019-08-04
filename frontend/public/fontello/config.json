@@ -35,6 +35,12 @@
       "css": "ccw",
       "code": 59394,
       "src": "fontawesome"
+    },
+    {
+      "uid": "80451d627470ea7f977a263fdb771d7b",
+      "css": "palette",
+      "code": 59395,
+      "src": "entypo"
     }
   ]
 }

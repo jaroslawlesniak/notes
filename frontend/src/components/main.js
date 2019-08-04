@@ -68,7 +68,8 @@ class Main extends React.Component {
                     title: "",
                     content: "",
                     trash: 0,
-                    archive: 0
+                    archive: 0,
+                    color: 0
                 });
 
                 this.setState({
@@ -121,7 +122,7 @@ class Main extends React.Component {
                 fetch(API.URL + "/notes.php?id=" + note.ID, {
                     method: "PUT",
                     body: JSON.stringify({note})
-                }).then(e => console.log(e.text()))
+                });
             break;
             case METHOD.DELETE:
                 fetch(API.URL + "/notes.php?id=" + note.ID, {

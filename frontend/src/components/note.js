@@ -9,7 +9,8 @@ class Note extends React.Component {
             title: props.note.title,
             content: props.note.content,
             archive: parseInt(props.note.archive),
-            trash: parseInt(props.note.trash)
+            trash: parseInt(props.note.trash),
+            color: parseInt(props.note.color)
         }
     }
 
@@ -37,12 +38,22 @@ class Note extends React.Component {
         
 
         return (
-            <div className="note" id={ "note-" + this.state.ID }>
-                <div className="header">
+            <div className={"note color-" + this.state.color + " lighten"} id={ "note-" + this.state.ID }>
+                <div className={"header color-" + this.state.color }>
                     <input onChange={ () => { this.updateTextState() } } onBlur={ () => { this.saveNote(METHOD.UPDATE_CONTENT) } } type="text" value={ this.state.title } />
                     { buttons }
                 </div>
                 <textarea onChange={ () => { this.updateTextState() } } onBlur={ () => { this.saveNote(METHOD.UPDATE_CONTENT) } } value={ this.state.content }/>
+                <div className="palette">
+                    <i className="icon-palette" title="Zmień kolor notatki"></i>
+                    <div className="list">
+                        <div className="color yellow" onClick={ () => { this.setColor(0) }}></div>
+                        <div className="color purple" onClick={ () => { this.setColor(1) }}></div>
+                        <div className="color green" onClick={ () => { this.setColor(2) }}></div>
+                        <div className="color blue" onClick={ () => { this.setColor(3) }}></div>
+                        <div className="color gray" onClick={ () => { this.setColor(4) }}></div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -89,6 +100,12 @@ class Note extends React.Component {
         }, () => { this.saveNote(METHOD.DELETE) });
     }
 
+    setColor(color) {
+        this.setState({
+            color: color
+        }, () => { this.saveNote(METHOD.UPDATE_CONTENT) });
+    }
+
     saveNote(updateMethod) {
         this.props.saveNote({
             ID: this.state.ID,
@@ -96,6 +113,7 @@ class Note extends React.Component {
             content: this.state.content,
             archive: this.state.archive,
             trash: this.state.trash,
+            color: this.state.color,
             method: updateMethod
         });
     }

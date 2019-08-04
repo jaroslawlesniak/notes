@@ -71,10 +71,11 @@
                 $post_vars = json_decode($post_vars, true);
 
                 if($post_vars['note']['method'] === 0) {
-                    $query = $pdo->prepare('UPDATE `notes` SET `title` = :title, `content` = :content WHERE `ID` = :id');
+                    $query = $pdo->prepare('UPDATE `notes` SET `title` = :title, `content` = :content, `color` = :color WHERE `ID` = :id');
                     $query->bindValue(':id', $post_vars['note']['ID'], PDO::PARAM_INT);
                     $query->bindValue(':title', $post_vars['note']['title'], PDO::PARAM_STR);
                     $query->bindValue(':content', $post_vars['note']['content'], PDO::PARAM_STR);
+                    $query->bindValue(':color', $post_vars['note']['color'], PDO::PARAM_INT);
                     $success = $query->execute();
                     
                     echo json_encode(["success" => (boolean) $success]);
@@ -84,7 +85,7 @@
                     $query = $pdo->prepare('UPDATE `notes` SET `archive` = :archive, `trash` = :trash WHERE `ID` = :id');
                     $query->bindValue(':id', $post_vars['note']['ID'], PDO::PARAM_INT);
                     $query->bindValue(':archive', $post_vars['note']['archive'], PDO::PARAM_INT);
-                    $query->bindValue(':trash', $post_vars['note']['trash'], PDO::PARAM_INT);
+                    $query->bindValue(':trash', $post_vars['note']['trash'], PDO::PARAM_INT);      
                     $success = $query->execute();
 
                     echo json_encode(["success" => (boolean) $success]); 
