@@ -4,12 +4,24 @@ import './App.scss';
 import Main from './components/main';
 import Footer from './components/footer';
 
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom';
+import { Redirect } from 'react-router'
+
+
 class App extends React.Component {
   render() {
     return (
       <div>
-        {/* <Header/> */}
-        <Main/>
+        <Router>
+          <Route exact path="/" render={() => <Redirect to="/inbox"/> }/>
+          <Route path="/inbox" component={() => <Main getNotes={1}/>} />
+          <Route path="/archive" component={() => <Main getNotes={2}/>} />
+          <Route path="/trash" component={() => <Main getNotes={3}/>} />
+        </Router>
         <Footer/>
       </div>
     ); 

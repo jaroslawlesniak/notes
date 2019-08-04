@@ -5,9 +5,15 @@ import API from '../libs/api';
 import METHOD from '../libs/method';
 import LoadingSpinner from './loadingSpinner';
 
+import {
+    BrowserRouter as Router,
+    Route,
+    Link
+  } from 'react-router-dom';
+
 class Main extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { notes: [], activeLink: 1, loading: false }
     }
 
@@ -36,13 +42,18 @@ class Main extends React.Component {
         }
         
         return (
+           
             <main>
                 <div className="row">
                     <div className="col-md-3 menu">
                         <div className="item" onClick={() => { this.createNewNote() }}><i className="icon-plus"></i>Dodaj notatkę</div>
-                        <div className="item active" onClick={ () => { this.selectMenuOption(1) }}><i className="icon-lightbulb"></i>Notatki</div>
-                        <div className="item" onClick={ () => { this.selectMenuOption(2) }}><i className="icon-file-archive"></i>Archiwum</div>
-                        <div className="item" onClick={ () => { this.selectMenuOption(3) }}><i className="icon-trash-empty"></i>Kosz</div>
+                        <Router>
+                            <div className='wrapper'>
+                                <Link to='/inbox' className="item active" onClick={ () => { this.selectMenuOption(1) }}><i className="icon-lightbulb"></i>Notatki</Link>
+                                <Link to='/archive' className="item" onClick={ () => { this.selectMenuOption(2) }}><i className="icon-file-archive"></i>Archiwum</Link>
+                                <Link to='/trash' className="item" onClick={ () => { this.selectMenuOption(3) }}><i className="icon-trash-empty"></i>Kosz</Link>
+                            </div>
+                        </Router>
                     </div>
                     <div className="col-md-9 notes">
                         { pageContent }
@@ -53,7 +64,7 @@ class Main extends React.Component {
     }
 
     componentDidMount() {
-        this.getNotes("inbox");  
+        this.selectMenuOption(this.props.getNotes);
     }
 
     createNewNote() {
