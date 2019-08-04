@@ -66,7 +66,9 @@ class Main extends React.Component {
                 notes.unshift({
                     ID: json.id,
                     title: "",
-                    content: ""
+                    content: "",
+                    trash: 0,
+                    archive: 0
                 });
 
                 this.setState({
