@@ -21,6 +21,9 @@ class Main extends React.Component {
                 pageContent = this.state.notes.map(note => (
                     <Note key={ note.ID } note={ note } saveNote={ this.saveNote } />
                 ));
+                if(this.state.activeLink === 3) {
+                    pageContent = (<div><i className='trashInfo'>Notatki są automatycznie usuwane z kosza po 7 dniach</i>{ pageContent }</div>)
+                }
             } else {
                 if(this.state.activeLink === 1) {
                     pageContent = <Info icon="icon-lightbulb" message="Tutaj pojawią się dodane przez Ciebie notatki"/>;
@@ -126,7 +129,14 @@ class Main extends React.Component {
             break;
             case METHOD.DELETE:
                 fetch(API.URL + "/notes.php?id=" + note.ID, {
-                    method: "DELETE"
+                    method: "DELETE",
+                    body: JSON.stringify({ pernament: false })
+                });
+            break;
+            case METHOD.PERNAMENT_DELETE:
+                fetch(API.URL + "/notes.php?id=" + note.ID, {
+                    method: "DELETE",
+                    body: JSON.stringify({ pernament: true })
                 });
             break;
             default:

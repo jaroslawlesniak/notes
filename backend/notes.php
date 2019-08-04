@@ -19,13 +19,13 @@
 
                 switch($_GET['category']) {
                     case 'inbox':
-                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 0 AND `archive` = 0 ORDER BY ID DESC');
+                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 0 AND `archive` = 0 AND `delete` = 0 ORDER BY ID DESC');
                     break;
                     case 'archive':
-                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 0 AND `archive` = 1 ORDER BY ID DESC');
+                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 0 AND `archive` = 1 AND `delete` = 0 ORDER BY ID DESC');
                     break;
                     case 'trash':
-                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 1 ORDER BY ID DESC');
+                        $query = $pdo->query('SELECT * FROM `notes` WHERE `trash` = 1 AND (`delete_timestamp` = "0000-00-00 00:00:00" OR `delete_timestamp` > NOW() - INTERVAl 1 WEEK) AND `delete` = 0 ORDER BY ID DESC');
                     break;
                 }
 
@@ -94,11 +94,24 @@
         break;
         case "DELETE":
             if(isset($_GET['id']) && !empty($_GET['id'])) {
-                $query = $pdo->prepare('UPDATE `notes` SET `trash` = 1 WHERE `ID` = :id');
-                $query->bindValue(':id', $_GET["id"], PDO::PARAM_INT);
-                $success = $query->execute();
+                $post_vars = file_get_contents("php://input");
+                $post_vars = json_decode($post_vars, true);
 
-                echo json_encode(["success" => (boolean) $success]);
+                if($post_vars['pernament'] === false) {
+                    $query = $pdo->prepare('UPDATE `notes` SET `trash` = 1, `delete_timestamp` = :delete_date WHERE `ID` = :id');
+                    $query->bindValue(':id', $_GET["id"], PDO::PARAM_INT);
+                    $query->bindValue(':delete_date', date("Y-m-d H:i:s"), PDO::PARAM_STR);
+                    $success = $query->execute();
+    
+                    echo json_encode(["success" => (boolean) $success]);
+                } else {
+                    $query = $pdo->prepare('UPDATE `notes` SET `delete` = 1 WHERE `ID` = :id');
+                    $query->bindValue(':id', $_GET["id"], PDO::PARAM_INT);
+                    $success = $query->execute();
+    
+                    echo json_encode(["success" => (boolean) $success]);
+                }
+               
             }
         break;
     }

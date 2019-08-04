@@ -26,7 +26,7 @@ class Note extends React.Component {
         if(this.state.trash === 1) {
             buttons = (<div className="buttons">
                 <i className="icon-ccw" title="Przywróć z kosza" onClick={ () => this.restoreNote() }></i>
-                <i className="icon-trash-empty" title="Usuń na zawsze" onClick={ () => this.deleteNote() }></i>
+                <i className="icon-trash-empty" title="Usuń na zawsze" onClick={ () => this.pernamentDeleteNote() }></i>
             </div>);
         }
         if(this.state.archive === 1 && this.state.trash === 0) {
@@ -73,7 +73,7 @@ class Note extends React.Component {
     deleteNote() {
         this.setState({
             trash: 1
-        }, () => { this.saveNote(METHOD.UPDATE_STATUS) });
+        }, () => { this.saveNote(METHOD.DELETE) });
     }
 
     archiveNote() {
@@ -94,10 +94,11 @@ class Note extends React.Component {
         }, () => { this.saveNote(METHOD.UPDATE_STATUS) });
     }
 
-    deleteForever() {
+    pernamentDeleteNote() {
+        alert('ok');
         this.setState({
             trash: 1
-        }, () => { this.saveNote(METHOD.DELETE) });
+        }, () => { this.saveNote(METHOD.PERNAMENT_DELETE) });
     }
 
     setColor(color) {
