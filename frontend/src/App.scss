@@ -4,6 +4,43 @@ $blue: #b7dfff;
 $green: #afeca4;
 $gray: #e5e5e5;
 
+
+* {
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-button {
+        width: 0px;
+        height: 0px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #8c8d8f;
+        border: none;
+        border-radius: 50px;
+
+        &:hover {
+            background: #ffffff;
+        }
+
+        &:active {
+            background: #000000;
+        }
+    }
+
+    ::-webkit-scrollbar-track {
+        background: inherit;
+        border: 0px none #ffffff;
+        border-radius: 50px;
+    }
+
+    ::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+}
+
 body {
     background-color: #fff;
     padding: 0px;
