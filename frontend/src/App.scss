@@ -113,7 +113,8 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: calc(100vh - 85px);
+    height: calc(100vh - 185px);
+    width: 100%;
 
     i {
         font-size: 60px;
@@ -132,17 +133,26 @@ nav {
 }
 
 .notes {
-  padding: 10px;
+  padding: 50px;
   min-height: calc(100vh - 65px);
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+
+  &::after {
+    content: "";
+    flex: auto;
+  }
 }
 
 .note {
     width: 300px;
     display: inline-block;
-    margin: 20px;
     vertical-align: top;
     transition: all .2s linear;
-    max-width: calc(100% - 40px);
+    margin: 20px;
+    height: 335px;
 
     .header {
         transition: all .3s linear;
